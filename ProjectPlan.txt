@@ -1,0 +1,88 @@
+I'm building "FoodBridge AI" for a national hackathon (Round 1 already submitted; now I need a working MVP + GitHub repo for Round 2). Build this as a full-stack MERN project inside the current folder.
+
+PROJECT SUMMARY
+FoodBridge AI is an AI-powered platform that connects surplus food donors (restaurants, event organizers, households, farms) with NGOs, using AI-based parsing and urgency-aware smart matching, so surplus food reaches people in need faster than manual/phone-based coordination.
+
+Problem statement it solves: Omni_AgriTech_14 — "Connecting Surplus Food to Those in Need."
+
+TECH STACK
+- Frontend: React (Vite) + Tailwind CSS
+- Backend: Node.js + Express
+- Database: MongoDB (use Mongoose), assume MongoDB Atlas connection string in .env
+- Auth: JWT-based, 3 roles — Donor, NGO, Admin
+- AI: OpenAI API (Node SDK) — used for (a) parsing free-text donation descriptions into structured data, and (b) generating a matching score + one-line reasoning between a donation and candidate NGOs. Assume OPENAI_API_KEY in .env.
+- Maps: Leaflet.js + OpenStreetMap tiles (no Google Maps API key needed)
+- Keep everything in a single repo with /client and /server folders
+
+FOLDER STRUCTURE
+Set up:
+/server
+  /models      (User, Donation, Match, NGO)
+  /routes
+  /controllers
+  /middleware  (auth, role-check)
+  /utils       (openai matching helper)
+  server.js
+  .env.example
+/client
+  /src
+    /pages     (Login, Register, DonorDashboard, NGODashboard, AdminDashboard, MapView, ImpactDashboard)
+    /components
+    /api       (axios instance + API calls)
+    /context   (auth context)
+  vite.config.js
+README.md
+
+CORE FEATURES TO BUILD, IN THIS ORDER (build and get each working before moving to the next):
+
+1. Auth & roles
+   - Register/login with JWT, role field (donor / ngo / admin)
+   - Protected routes on frontend based on role
+   - Simple, clean UI (Tailwind) — no need for a UI kit, just clean cards and forms
+
+2. Donation intake (Donor role)
+   - Form: food type, quantity, unit, pickup location (use browser geolocation to auto-fill lat/lng, editable), expiry/urgency window (dropdown: <1hr, 1-3hrs, 3-6hrs, 6-24hrs, >24hrs), optional free-text description, optional photo upload (store locally in /server/uploads for now, no cloud storage needed for MVP)
+   - On submit, call the AI parsing helper: send the free-text description to OpenAI, get back structured JSON (food_type, estimated_quantity, perishability) using function calling / structured JSON output. Merge this with the form fields.
+   - Save donation to MongoDB with status: "pending"
+
+3. AI matching engine
+   - When a donation is created, find NGOs within a reasonable radius (use lat/lng + a simple distance calculation, e.g. haversine formula — no need for Google Distance Matrix)
+   - Call OpenAI with the donation details + list of candidate NGOs (distance, stated capacity/needs) and ask it to return a ranked list of matches, each with a numeric score (0-100) and a short one-line reasoning string, as structured JSON
+   - Store the top match (or top 3) linked to the donation
+   - This should be a reusable function in /server/utils so it's easy to demo and explain in the pitch
+
+4. NGO dashboard
+   - List of incoming matched donations with the AI reasoning shown
+   - Accept / Reject buttons
+   - On accept, donation status moves: pending -> matched -> accepted -> picked_up -> delivered
+   - Simple status update buttons for NGO to move it through pickup -> delivered
+
+5. Map view
+   - Leaflet map showing donor pins and NGO pins (different icons/colors)
+   - Click a pin to see basic info in a popup
+
+6. Impact dashboard
+   - Aggregate stats: total meals/donations logged, active donors, active NGOs, donations delivered
+   - Simple bar/line chart (use recharts) showing donations over time
+   - It's fine to combine real + seeded historical data — clearly comment in code that seed data is for demo purposes
+
+7. Seed script
+   - Write a /server/seed.js script that creates a handful of demo donors, NGOs, and past donations (with varied dates/status) so the app looks alive for a live demo. Make it idempotent (safe to re-run).
+
+NOT NEEDED FOR MVP (skip unless I ask later): WhatsApp Business API intake, CSR certificate PDF generation, push notifications, payment/billing, offline-first PWA support.
+
+IMPORTANT — AI USAGE DISCLOSURE
+Add a section in README.md titled "AI Usage Disclosure" stating:
+- OpenAI API is used as a live product feature for (1) parsing donor free-text descriptions and (2) generating matching scores + reasoning between donations and NGOs.
+- Claude (via Claude Code) was used to scaffold, generate, and assist in writing this codebase during development.
+Be explicit and factual — this is a mandatory hackathon disclosure requirement, not optional boilerplate.
+
+WORKFLOW FOR YOU (Claude Code)
+- Set up the repo structure and install dependencies first.
+- Build backend models + routes + auth before touching frontend.
+- After each feature above is working, tell me how to test it (e.g. "run npm run dev in /server and /client, then do X") before moving to the next feature.
+- Use a .env.example file with placeholder keys (MONGODB_URI, JWT_SECRET, OPENAI_API_KEY) — never commit a real .env.
+- Write a clear README with setup steps, since this repo will be reviewed by hackathon judges.
+- Keep the UI clean and functional over fancy — this needs to demo well in a few minutes, not win a design award.
+
+Start by proposing the exact file/folder scaffold and package.json dependencies for both /client and /server, then begin building once I confirm.
