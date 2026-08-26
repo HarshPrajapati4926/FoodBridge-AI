@@ -20,7 +20,7 @@ async function register(req, res) {
     if (!name || !email || !password || !role) {
       return res.status(400).json({ message: "name, email, password, and role are required" });
     }
-    if (!["donor", "ngo", "admin"].includes(role)) {
+    if (!["donor", "ngo"].includes(role)) {
       return res.status(400).json({ message: "Invalid role" });
     }
 

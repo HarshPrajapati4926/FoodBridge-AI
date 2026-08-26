@@ -22,7 +22,7 @@ export default function DonationCard({ donation, children }) {
             <p className="text-sm text-gray-600 mt-1">{donation.description}</p>
           )}
           {donation.aiParsed?.food_type && (
-            <p className="text-xs text-emerald-700 mt-1">
+            <p className="text-xs text-brand-700 mt-1">
               AI parsed: {donation.aiParsed.food_type} · {donation.aiParsed.estimated_quantity} · perishability: {donation.aiParsed.perishability}
             </p>
           )}

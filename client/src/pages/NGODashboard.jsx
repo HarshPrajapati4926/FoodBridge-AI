@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Navbar from "../components/Navbar";
 import DonationCard from "../components/DonationCard";
 import {
   fetchNgoMatches,
@@ -91,77 +90,74 @@ export default function NGODashboard() {
   }
 
   return (
-    <div>
-      <Navbar />
-      <div className="max-w-4xl mx-auto p-6 space-y-8">
-        {actionError && <p className="text-sm text-red-600">{actionError}</p>}
+    <div className="max-w-4xl mx-auto p-6 space-y-8">
+      {actionError && <p className="text-sm text-red-600">{actionError}</p>}
 
-        <div>
-          <h1 className="text-lg font-semibold text-gray-800 mb-3">Incoming matched donations</h1>
-          {loadingMatches ? (
-            <p className="text-gray-500 text-sm">Loading...</p>
-          ) : matches.length === 0 ? (
-            <p className="text-gray-500 text-sm">No matched donations right now.</p>
-          ) : (
-            <div className="space-y-3">
-              {matches.map((m) => (
-                <DonationCard key={m._id} donation={m.donation}>
-                  <div className="mt-3 pt-3 border-t border-gray-100">
-                    <div className="bg-emerald-50 rounded-md p-3 text-sm mb-3">
-                      <div className="flex justify-between items-center">
-                        <span className="font-medium text-emerald-800">AI match score</span>
-                        <span className="text-emerald-700 font-semibold">{m.score}/100</span>
-                      </div>
-                      <p className="text-emerald-700 mt-1">{m.reasoning}</p>
-                      <p className="text-gray-500 text-xs mt-1">{m.distanceKm} km away</p>
+      <div>
+        <h1 className="text-lg font-semibold text-gray-800 mb-3">Incoming matched donations</h1>
+        {loadingMatches ? (
+          <p className="text-gray-500 text-sm">Loading...</p>
+        ) : matches.length === 0 ? (
+          <p className="text-gray-500 text-sm">No matched donations right now.</p>
+        ) : (
+          <div className="space-y-3">
+            {matches.map((m) => (
+              <DonationCard key={m._id} donation={m.donation}>
+                <div className="mt-3 pt-3 border-t border-gray-100">
+                  <div className="bg-brand-50 rounded-md p-3 text-sm mb-3">
+                    <div className="flex justify-between items-center">
+                      <span className="font-medium text-brand-800">AI match score</span>
+                      <span className="text-brand-700 font-semibold">{m.score}/100</span>
                     </div>
-                    <div className="flex gap-2">
-                      <button
-                        disabled={busyId === m._id}
-                        onClick={() => handleAccept(m._id)}
-                        className="bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white text-sm font-medium px-4 py-1.5 rounded-md"
-                      >
-                        Accept
-                      </button>
-                      <button
-                        disabled={busyId === m._id}
-                        onClick={() => handleReject(m._id)}
-                        className="bg-gray-100 hover:bg-gray-200 disabled:opacity-50 text-gray-700 text-sm font-medium px-4 py-1.5 rounded-md"
-                      >
-                        Reject
-                      </button>
-                    </div>
+                    <p className="text-brand-700 mt-1">{m.reasoning}</p>
+                    <p className="text-gray-500 text-xs mt-1">{m.distanceKm} km away</p>
                   </div>
-                </DonationCard>
-              ))}
-            </div>
-          )}
-        </div>
-
-        <div>
-          <h2 className="text-lg font-semibold text-gray-800 mb-3">Your accepted donations</h2>
-          {loadingDonations ? (
-            <p className="text-gray-500 text-sm">Loading...</p>
-          ) : donations.length === 0 ? (
-            <p className="text-gray-500 text-sm">No accepted donations yet.</p>
-          ) : (
-            <div className="space-y-3">
-              {donations.map((d) => (
-                <DonationCard key={d._id} donation={d}>
-                  {NEXT_ACTION_LABEL[d.status] && (
+                  <div className="flex gap-2">
                     <button
-                      disabled={busyId === d._id}
-                      onClick={() => handleAdvance(d._id)}
-                      className="mt-3 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white text-sm font-medium px-4 py-1.5 rounded-md"
+                      disabled={busyId === m._id}
+                      onClick={() => handleAccept(m._id)}
+                      className="bg-brand-600 hover:bg-brand-700 disabled:opacity-50 text-white text-sm font-medium px-4 py-1.5 rounded-md transition"
                     >
-                      {NEXT_ACTION_LABEL[d.status]}
+                      Accept
                     </button>
-                  )}
-                </DonationCard>
-              ))}
-            </div>
-          )}
-        </div>
+                    <button
+                      disabled={busyId === m._id}
+                      onClick={() => handleReject(m._id)}
+                      className="bg-gray-100 hover:bg-gray-200 disabled:opacity-50 text-gray-700 text-sm font-medium px-4 py-1.5 rounded-md transition"
+                    >
+                      Reject
+                    </button>
+                  </div>
+                </div>
+              </DonationCard>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div>
+        <h2 className="text-lg font-semibold text-gray-800 mb-3">Your accepted donations</h2>
+        {loadingDonations ? (
+          <p className="text-gray-500 text-sm">Loading...</p>
+        ) : donations.length === 0 ? (
+          <p className="text-gray-500 text-sm">No accepted donations yet.</p>
+        ) : (
+          <div className="space-y-3">
+            {donations.map((d) => (
+              <DonationCard key={d._id} donation={d}>
+                {NEXT_ACTION_LABEL[d.status] && (
+                  <button
+                    disabled={busyId === d._id}
+                    onClick={() => handleAdvance(d._id)}
+                    className="mt-3 bg-accent-500 hover:bg-accent-600 disabled:opacity-50 text-white text-sm font-medium px-4 py-1.5 rounded-md transition"
+                  >
+                    {NEXT_ACTION_LABEL[d.status]}
+                  </button>
+                )}
+              </DonationCard>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

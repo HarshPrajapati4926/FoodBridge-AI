@@ -54,9 +54,10 @@ Client runs on `http://localhost:5173`.
 2. Go to `http://localhost:5173/register`.
 3. Register a **donor** account (name/email/password, role = donor) — you'll be redirected to the Donor Dashboard.
 4. Log out, then register an **ngo** account — fill in organization name and lat/lng (use "Use my current location" or type coordinates) — you'll be redirected to the NGO Dashboard.
-5. Log out, then register an **admin** account — redirected to the Admin Dashboard.
-6. Try visiting `/ngo` while logged in as a donor — you should be redirected away (role-protected route).
-7. Refresh the page while logged in — you should stay logged in (JWT persisted in localStorage, validated via `/api/auth/me`).
+5. Try visiting `/ngo` while logged in as a donor — you should be redirected away (role-protected route).
+6. Refresh the page while logged in — you should stay logged in (JWT persisted in localStorage, validated via `/api/auth/me`).
+
+**Note on the admin role:** there is intentionally no "Admin" option on the register page, and the backend rejects `role: "admin"` on the public `/api/auth/register` endpoint (400 Invalid role) — the platform has exactly one admin account, created by `npm run seed` (`admin@foodbridge.demo` / `password123`). Log in with those credentials directly at `/login` to see the Admin Dashboard.
 
 ## Testing Feature 2: Donation intake (Donor role)
 
@@ -87,7 +88,7 @@ cd server
 npm run seed
 ```
 
-This creates 3 demo donors, 2 demo NGOs (password `password123` for all seed accounts), and 20 backdated donations spanning the last month with varied statuses (pending, matched, accepted, picked_up, delivered) and matches — so the map, NGO dashboard, and impact charts all have data to show immediately. It's idempotent: re-running it skips donation seeding if seed data already exists, so it's safe to run multiple times. Seeded donations are flagged with `isSeedData: true` in the database, and this is called out in code comments in `server/seed.js` — the impact dashboard mixes this seed data with real activity and says so on-screen.
+This creates 3 demo donors, 2 demo NGOs, 1 admin account (`admin@foodbridge.demo`), and 20 backdated donations spanning the last month with varied statuses (pending, matched, accepted, picked_up, delivered) and matches — so the map, NGO dashboard, and impact charts all have data to show immediately. Password `password123` for every seed account, including the admin. It's idempotent: re-running it skips donation seeding if seed data already exists, so it's safe to run multiple times. Seeded donations are flagged with `isSeedData: true` in the database, and this is called out in code comments in `server/seed.js` — the impact dashboard mixes this seed data with real activity and says so on-screen.
 
 ## Testing Feature 4: NGO dashboard
 

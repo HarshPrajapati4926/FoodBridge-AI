@@ -6,6 +6,7 @@ import NGODashboard from "./pages/NGODashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import MapView from "./pages/MapView";
 import ImpactDashboard from "./pages/ImpactDashboard";
+import Support from "./pages/Support";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { useAuth } from "./context/AuthContext";
 
@@ -64,6 +65,14 @@ export default function App() {
         element={
           <ProtectedRoute>
             <ImpactDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/support"
+        element={
+          <ProtectedRoute>
+            <Support />
           </ProtectedRoute>
         }
       />

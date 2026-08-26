@@ -5,3 +5,11 @@ server/uploads/*
 dist/
 .DS_Store
 *.log
+
+# local scratch / temporary test harnesses (never part of the app)
+.ppt-assets/
+.ui-check/
+.deep-test/
+.final-check/
+.playwright-test/
+.tmp-shot/

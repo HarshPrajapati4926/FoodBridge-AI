@@ -87,6 +87,10 @@ async function seed() {
     ngoRecords.push(ngo);
   }
 
+  // The platform has exactly one admin account - it is never self-registered via the
+  // public /register endpoint (which only accepts donor/ngo), only created here.
+  await upsertUser("Platform Admin", "admin@foodbridge.demo", "admin");
+
   const existingSeedDonations = await Donation.countDocuments({ isSeedData: true });
   if (existingSeedDonations > 0) {
     console.log(`Seed donations already exist (${existingSeedDonations}). Skipping donation seeding.`);

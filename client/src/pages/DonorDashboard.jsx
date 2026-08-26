@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Navbar from "../components/Navbar";
 import DonationCard from "../components/DonationCard";
 import { createDonation, fetchMyDonations, fetchDonationMatches } from "../api/donationApi";
 
@@ -82,8 +81,6 @@ export default function DonorDashboard() {
   }
 
   return (
-    <div>
-      <Navbar />
       <div className="max-w-4xl mx-auto p-6 space-y-8">
         <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
           <h1 className="text-xl font-semibold text-gray-800 mb-4">Log a food donation</h1>
@@ -94,7 +91,7 @@ export default function DonorDashboard() {
                 <label className="block text-sm font-medium text-gray-700 mb-1">Food type</label>
                 <input
                   required
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500"
                   placeholder="e.g. Cooked rice"
                   value={form.foodType}
                   onChange={(e) => setForm({ ...form, foodType: e.target.value })}
@@ -107,7 +104,7 @@ export default function DonorDashboard() {
                   min="0"
                   step="any"
                   required
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500"
                   value={form.quantity}
                   onChange={(e) => setForm({ ...form, quantity: e.target.value })}
                 />
@@ -117,7 +114,7 @@ export default function DonorDashboard() {
                 <input
                   required
                   placeholder="kg, plates, packets..."
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500"
                   value={form.unit}
                   onChange={(e) => setForm({ ...form, unit: e.target.value })}
                 />
@@ -130,14 +127,14 @@ export default function DonorDashboard() {
                 <input
                   required
                   placeholder="Latitude"
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500"
                   value={form.lat}
                   onChange={(e) => setForm({ ...form, lat: e.target.value })}
                 />
                 <input
                   required
                   placeholder="Longitude"
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500"
                   value={form.lng}
                   onChange={(e) => setForm({ ...form, lng: e.target.value })}
                 />
@@ -145,13 +142,13 @@ export default function DonorDashboard() {
               <button
                 type="button"
                 onClick={autoLocate}
-                className="text-sm text-emerald-700 hover:underline mt-2"
+                className="text-sm text-brand-700 hover:underline mt-2"
               >
                 {locating ? "Locating..." : "Use my current location"}
               </button>
               <input
                 placeholder="Pickup address (optional)"
-                className="w-full border border-gray-300 rounded-md px-3 py-2 mt-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className="w-full border border-gray-300 rounded-md px-3 py-2 mt-2 focus:outline-none focus:ring-2 focus:ring-brand-500"
                 value={form.pickupAddress}
                 onChange={(e) => setForm({ ...form, pickupAddress: e.target.value })}
               />
@@ -160,7 +157,7 @@ export default function DonorDashboard() {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Urgency window</label>
               <select
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500"
                 value={form.urgency}
                 onChange={(e) => setForm({ ...form, urgency: e.target.value })}
               >
@@ -178,7 +175,7 @@ export default function DonorDashboard() {
               </label>
               <textarea
                 placeholder="e.g. Leftover catering from a wedding, about 30 plates of rice and curry, still warm"
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500"
                 value={form.description}
                 onChange={(e) => setForm({ ...form, description: e.target.value })}
               />
@@ -194,12 +191,12 @@ export default function DonorDashboard() {
             </div>
 
             {error && <p className="text-sm text-red-600">{error}</p>}
-            {success && <p className="text-sm text-emerald-600">{success}</p>}
+            {success && <p className="text-sm text-brand-600">{success}</p>}
 
             <button
               type="submit"
               disabled={submitting}
-              className="bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-medium px-5 py-2 rounded-md"
+              className="bg-brand-600 hover:bg-brand-700 disabled:opacity-50 text-white font-medium px-5 py-2 rounded-md"
             >
               {submitting ? "Submitting..." : "Submit donation"}
             </button>
@@ -223,7 +220,6 @@ export default function DonorDashboard() {
           )}
         </div>
       </div>
-    </div>
   );
 }
 
@@ -249,7 +245,7 @@ function MatchList({ donationId }) {
 
   return (
     <div className="mt-3 pt-3 border-t border-gray-100">
-      <button onClick={toggle} className="text-sm text-emerald-700 hover:underline">
+      <button onClick={toggle} className="text-sm text-brand-700 hover:underline">
         {open ? "Hide matched NGOs" : "View matched NGOs"}
       </button>
       {open && (
@@ -265,7 +261,7 @@ function MatchList({ donationId }) {
                   <span className="font-medium text-gray-800">
                     #{m.rank} {m.ngo?.organizationName}
                   </span>
-                  <span className="text-emerald-700 font-semibold">{m.score}/100</span>
+                  <span className="text-brand-700 font-semibold">{m.score}/100</span>
                 </div>
                 <p className="text-gray-600 mt-1">{m.reasoning}</p>
                 <p className="text-gray-400 text-xs mt-1">{m.distanceKm} km away</p>
