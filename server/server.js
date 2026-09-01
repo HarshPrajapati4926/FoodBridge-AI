@@ -13,7 +13,26 @@ const impactRoutes = require("./routes/impactRoutes");
 
 const app = express();
 
-app.use(cors({ origin: process.env.CLIENT_URL || "http://localhost:5173" }));
+// CLIENT_URL may hold one or more comma-separated origins (e.g. a Netlify
+// production URL plus a deploy-preview URL). Localhost is always allowed so
+// local dev keeps working regardless of what's set in production.
+const allowedOrigins = new Set(
+  [...(process.env.CLIENT_URL || "").split(","), "http://localhost:5173"]
+    .map((o) => o.trim().replace(/\/+$/, ""))
+    .filter(Boolean)
+);
+
+app.use(
+  cors({
+    origin(origin, callback) {
+      // no Origin header (curl, server-to-server, same-origin) - allow
+      if (!origin || allowedOrigins.has(origin.replace(/\/+$/, ""))) {
+        return callback(null, true);
+      }
+      callback(new Error(`Origin ${origin} not allowed by CORS`));
+    },
+  })
+);
 app.use(express.json());
 app.use(morgan("dev"));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
