@@ -17,6 +17,24 @@ All 7 core MVP features are implemented: Auth & roles, Donation intake, AI match
 - AI: OpenAI API (donation parsing + matching)
 - Maps: Leaflet.js + OpenStreetMap
 
+## Tests & linting
+
+The backend has a real automated test suite (42 tests, 5 files) using Jest + Supertest against an in-memory MongoDB (`mongodb-memory-server`) - no real database or network access required:
+
+```
+cd server
+npm test
+```
+
+Covers: auth edge cases (validation, duplicate email, NoSQL injection attempts, JWT tampering), donation validation and cross-user data isolation, the NGO accept/reject race condition (two NGOs racing to accept the same donation), CORS origin handling, and file-upload error handling (bad file type, oversized upload).
+
+Both `client` and `server` have ESLint (flat config) + Prettier configured:
+
+```
+npm run lint      # from either client/ or server/
+npm run format
+```
+
 ## Setup
 
 ### 1. Backend

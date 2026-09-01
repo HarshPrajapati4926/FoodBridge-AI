@@ -43,7 +43,7 @@ export default function NGODashboard() {
     try {
       const res = await fetchNgoDonations();
       setDonations(res.data.donations);
-    } catch (err) {
+    } catch {
       // non-fatal
     } finally {
       setLoadingDonations(false);

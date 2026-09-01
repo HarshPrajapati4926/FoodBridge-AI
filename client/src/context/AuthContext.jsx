@@ -5,14 +5,13 @@ const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  // Only worth showing a loading state if there's a token to validate -
+  // otherwise there's nothing to wait for.
+  const [loading, setLoading] = useState(() => !!localStorage.getItem("fb_token"));
 
   useEffect(() => {
     const token = localStorage.getItem("fb_token");
-    if (!token) {
-      setLoading(false);
-      return;
-    }
+    if (!token) return;
     fetchMe()
       .then((res) => setUser(res.data.user))
       .catch(() => {

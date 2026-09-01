@@ -51,7 +51,7 @@ export default function DonorDashboard() {
     try {
       const res = await fetchMyDonations();
       setDonations(res.data.donations);
-    } catch (err) {
+    } catch {
       // non-fatal; list just stays empty
     } finally {
       setLoadingDonations(false);
@@ -234,7 +234,7 @@ function MatchList({ donationId }) {
       try {
         const res = await fetchDonationMatches(donationId);
         setMatches(res.data.matches);
-      } catch (err) {
+      } catch {
         setMatches([]);
       } finally {
         setLoading(false);
