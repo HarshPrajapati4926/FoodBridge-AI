@@ -48,6 +48,24 @@ npm run dev
 
 Client runs on `http://localhost:5173`.
 
+## Deploying the backend to Railway
+
+The repo is a monorepo (`/client` + `/server`), so Railway needs to be told the API lives in `/server`.
+
+1. On [railway.app](https://railway.app), **New Project → Deploy from GitHub repo** and pick `HarshPrajapati4926/FoodBridge-AI`.
+2. Once the service is created, open its **Settings** and set **Root Directory** to `server`. Railway auto-detects Node via Nixpacks and uses `server/railway.json` for the start command (`node server.js`) and health check (`/api/health`).
+3. In **Variables**, add the same keys as `server/.env.example`:
+   - `MONGODB_URI` — your Atlas connection string (use a production-ready cluster, not a personal dev one, if you have both)
+   - `JWT_SECRET` — a long random string (generate a fresh one for production, don't reuse the local dev value)
+   - `OPENAI_API_KEY` — your OpenAI key
+   - `CLIENT_URL` — the URL your frontend will be deployed at (e.g. a Vercel/Netlify URL); this drives the CORS allow-list, so the API will reject requests from any other origin until this is set correctly
+   - Railway supplies `PORT` automatically — don't set it yourself
+4. Deploy. Railway will build and expose a public URL like `https://your-service.up.railway.app`.
+5. Point your frontend's `VITE_API_URL` (in `client`'s environment, wherever it's deployed) at `https://your-service.up.railway.app/api`, and re-deploy the frontend.
+6. Run the seed script once against production if you want demo data live: `railway run npm run seed` from `/server` (with the Railway CLI linked to the project), or run it locally with `MONGODB_URI` temporarily pointed at the production database.
+
+**Known limitation:** uploaded donation photos are written to `server/uploads/`, which is not persistent storage on Railway — files are lost on every redeploy/restart. Fine for demo purposes; would need S3/Cloudinary for real production use.
+
 ## Testing Feature 1: Auth & roles
 
 1. Start both servers as above.
